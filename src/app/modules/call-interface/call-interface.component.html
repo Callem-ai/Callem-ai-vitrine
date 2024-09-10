@@ -1,0 +1,30 @@
+<div class="container text-center">
+    <div class="logo">
+        <img src="images/Agent.jpg" alt="Logo" class="logo-img ">
+    </div>
+    <div class="agentname">
+        {{agentName}}
+    </div>
+    @if(!isCalling){
+    <div class="call-button ">
+        <button (click)="startCall() " class="btn btn-primary button ">Call</button>
+    </div>
+    } @else {
+
+    <div class="call-actions ">
+        <button (click)="hangUp() " class="btn btn-danger icon ">
+            <i class=" bi bi-telephone-x"></i>      
+         </button>
+
+        <button (click)="toggleMic() " class="btn btn-secondary icon">
+            @if(micEnabled){
+       <span>    <i class=" bi bi-mic"></i>
+       </span>
+            }
+            @else {
+            <span ><i class="bi bi-mic-mute"></i></span>    
+            }
+        </button>
+    </div>
+    }
+</div>
