@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/dc49dc53-2c41-49b0-997d-53b5a99ae104/resourceGroups/Callem_ai/providers/Microsoft.Web/sites/Calllem-ai",
+    "appService.deploySubpath": "."
+}
