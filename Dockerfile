@@ -23,7 +23,7 @@ FROM nginx:1.27-alpine
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Copy built files from the build stage
-COPY --from=build /app/dist/callem/browser /usr/share/nginx/html
+COPY --from=build /app/dist/callem-ai-vitrine /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
