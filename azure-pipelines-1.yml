@@ -33,6 +33,24 @@ stages:
           $(tag)
           latest
 
+# Added Test stage
+- stage: Test
+  displayName: Run Tests
+  jobs:
+  - job: Run_Tests
+    displayName: Run Tests
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - script: |
+        echo "Installing dependencies..."
+        npm install  # Added step to install dependencies
+      displayName: 'Install Dependencies'
+
+    - script: |
+        echo "Running tests..."
+        npm test  # Added step to run tests
+      displayName: 'Run Tests'
 
 - stage: Deploy
   displayName: Deploy to dev 
