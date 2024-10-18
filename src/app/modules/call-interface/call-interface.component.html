@@ -1,29 +1,20 @@
-<div class="container text-center">
+<div class="container">
+    <audio id="audio-remote" autoplay></audio>
     <div class="logo">
-        <img src="images/Agent.jpg" alt="Logo" class="logo-img ">
+        <img src="images/Agent.jpg" alt="Logo" class="logo-img">
     </div>
-    <div class="agentname">{{agentName}}
-    </div>
-    @if(!isCalling){
-    <div class="call-button ">
-        <button (click)="startCall() " class="btn btn-primary button ">Call</button>
-    </div>
-    } @else {
+    <div class="agentname" id="agentName">Agent Name</div>
 
-    <div class="call-actions ">
-        <button (click)="hangUp() " class="btn btn-danger icon ">
-            <i class=" bi bi-telephone-x"></i>      
-         </button>
+    <div id="callButton" class="call-button">
+        <button (click)="startCall()" class="btn btn-primary button">Call</button>
+    </div>
 
-        <button (click)="toggleMic() " class="btn btn-secondary icon">
-            @if(micEnabled){
-       <span>    <i class=" bi bi-mic"></i>
-       </span>
-            }
-            @else {
-            <span ><i class="bi bi-mic-mute"></i></span>    
-            }
+    <div id="callActions" class="call-actions" style="display: none;">
+        <button (click)="hangUp()" class="btn btn-danger icon">
+            <i class="bi bi-telephone-x"></i>
+        </button>
+        <button (click)="toggleMic()" class="btn btn-secondary icon" id="micButton">
+            <span id="micIcon"><i class="bi bi-mic-mute"></i></span>
         </button>
     </div>
-    }
 </div>
