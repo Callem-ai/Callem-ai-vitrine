@@ -3,7 +3,7 @@ name: Run Unit Tests
 on:
   pull_request:
     branches:
-      - main
+      - feature/githubActions
 
 jobs:
   test:
@@ -27,4 +27,3 @@ jobs:
     # Run tests
     - name: Run unit tests
       run: npm run test -- --watch=false --browsers=ChromeHeadless
-  
