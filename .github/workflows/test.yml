@@ -27,3 +27,8 @@ jobs:
     # Run tests
     - name: Run unit tests
       run: npm run test -- --watch=false --browsers=ChromeHeadless
+    - name: Test Docker Username
+      run: echo ${{ secrets.DOCKER_USERNAME }}
+
+    - name: Test Docker Username
+      run: echo ${{ secrets.DOCKER_PASSWORD}}
