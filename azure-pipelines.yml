@@ -50,7 +50,7 @@ stages:
         ConnectionType: 'AzureRM'
         azureSubscription: 'Abonnement Azure 1(dc49dc53-2c41-49b0-997d-53b5a99ae104)'
         appType: 'webAppContainer'
-        WebAppName: 'callem-ai-vitrine'
+        WebAppName: 'callemai-demo'
         DockerNamespace: 'callem.azurecr.io'
         DockerRepository: $(imageRepository)
         DockerImageTag: $(Build.BuildId)
