@@ -11,7 +11,9 @@ declare var SIPml: any;
 export class CallInterfaceComponent implements AfterViewInit {
   private stack: any;
   private callSession: any;
-  private micEnabled = false;
+  micEnabled = false;
+  isMicMuted = true; // Initially muted
+
 //isCalling = false;
   ngAfterViewInit(): void {
     (window as any).startCall = this.startCall.bind(this);
@@ -57,36 +59,34 @@ export class CallInterfaceComponent implements AfterViewInit {
 
   startCall() {
    // this.isCalling = true;
-    this.micEnabled = true;
 
     // if (this.stack && this.stack.started) {
       this.callSession = this.stack.newSession('call-audio', {
         audio_remote: document.getElementById('audio-remote')
       });
+      this.callSession.addEventListener('connected', this.onCallConnected.bind(this));
       this.callSession.call('sip:5100@webrtc-beta.callem.ai');
-    // } else {
-      console.error('SIP stack is not initialized or not started.');
-    // }
-  }
 
+
+  }
+  private onCallConnected(): void {
+    console.log('oncallconnected')
+    this.micEnabled = true;
+   
+
+}
   hangUp() {
    // this.isCalling = false;
+
     this.micEnabled = false;
-    document.getElementById('callButton')!.style.display = 'block';
-    document.getElementById('callActions')!.style.display = 'none';
-    if (this.callSession) {
+   
+ 
       this.callSession.hangup();
-    }
   }
 
-  toggleMic() {
-   // this.micEnabled = !this.micEnabled;
-    const micIcon = document.getElementById('micIcon');
-    if (micIcon) {
-      micIcon.innerHTML = this.micEnabled ? '<i class="bi bi-mic"></i>' : '<i class="bi bi-mic-mute"></i>';
-    }
-    // Add logic to enable/disable the mic here if necessary
-  
+ 
+  toggleMic(): void {
+    this.isMicMuted = !this.isMicMuted; // Toggle the mic status
   }
 
   
