@@ -5,7 +5,7 @@ import { CallInterfaceComponent } from "./modules/call-interface/call-interface.
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CallInterfaceComponent],
+  imports: [RouterOutlet, CallInterfaceComponent ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

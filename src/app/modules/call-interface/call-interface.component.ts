@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
+declare var SIPml: any;
 @Component({
   selector: 'app-call-interface',
   standalone: true,
@@ -8,48 +8,86 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './call-interface.component.html',
   styleUrl: './call-interface.component.scss'
 })
-export class CallInterfaceComponent implements OnInit {
-  isCalling = false;
+export class CallInterfaceComponent implements AfterViewInit {
+  private stack: any;
+  private callSession: any;
   micEnabled = false;
-  agentName: string | null = null;
-  phoneNumber: string | null = null;
+  isMicMuted = true; // Initially muted
 
-  constructor(private route: ActivatedRoute) { }
+//isCalling = false;
+  ngAfterViewInit(): void {
+    (window as any).startCall = this.startCall.bind(this);
+    (window as any).hangUp = this.hangUp.bind(this);
+    (window as any).toggleMic = this.toggleMic.bind(this);
 
-  ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      this.agentName = params.get('name');
-      this.phoneNumber = params.get('phone');
+    // Initialize SIPml
+    (window as any).SIPml.init(
+      () => this.initializeSIP(),
+      (e: any) => console.error('Failed to initialize SIPml:', e)
+    );
+  }
+
+  initializeSIP() {
+    this.stack = new (window as any).SIPml.Stack({
+      realm: 'webrtc-beta.callem.ai',
+      impi: '101',
+      impu: 'sip:101@webrtc-beta.callem.ai',
+      password: '101',
+      websocket_proxy_url: 'wss://webrtc-beta.callem.ai:8089/ws',
+      ice_servers: [{ urls: 'stun:stun.l.google.com:19302' }],
+      enable_rtcweb_breaker: false,
+      enable_early_ims: false,
+      enable_media_stream_cache: true,
+      events_listener: {
+        events: '*',
+        listener: (e: any) => {
+          console.log('SIP event:', e);
+        }
+      }
     });
-  }
-  async startCall() {
-    try {
-      await this.requestMicPermission();
-      this.isCalling = true;
-      this.micEnabled = true;
-      // Logic for starting the call can be added here
-    } catch (error) {
-      console.error('Microphone permission denied', error);
-    }
+
+    // Start the SIP stack
+    this.stack.start(
+      () => {
+        console.log('SIP stack started');
+      },
+      (e: any) => {
+        console.error('Failed to start SIP stack:', e);
+      }
+    );
   }
 
+  startCall() {
+   // this.isCalling = true;
+
+    // if (this.stack && this.stack.started) {
+      this.callSession = this.stack.newSession('call-audio', {
+        audio_remote: document.getElementById('audio-remote')
+      });
+      this.callSession.addEventListener('connected', this.onCallConnected.bind(this));
+      this.callSession.call('sip:5100@webrtc-beta.callem.ai');
+
+
+  }
+  private onCallConnected(): void {
+    console.log('oncallconnected')
+    this.micEnabled = true;
+   
+
+}
   hangUp() {
-    this.isCalling = false;
+   // this.isCalling = false;
+
     this.micEnabled = false;
-    // Logic for hanging up the call can be added here
+   
+ 
+      this.callSession.hangup();
   }
 
-  toggleMic() {
-    this.micEnabled = !this.micEnabled;
-    // Logic for enabling/disabling the mic can be added here
+ 
+  toggleMic(): void {
+    this.isMicMuted = !this.isMicMuted; // Toggle the mic status
   }
 
-  async requestMicPermission() {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      stream.getTracks().forEach(track => track.stop()); // Stop the mic after permission is granted
-    } catch (err) {
-      throw new Error('Microphone permission denied');
-    }
-  }
+  
 }
