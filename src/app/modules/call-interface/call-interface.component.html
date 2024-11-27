@@ -3,7 +3,7 @@
     <div class="logo">
         <img src="images/Agent.jpg" alt="Logo" class="logo-img">
     </div>
-    <div class="agentname" id="agentName">Agent Name</div>
+    <div class="agentname" id="agentName">{{name}}</div>
     @if(micEnabled) {
     <div id="callActions" class="call-actions">
         <button (click)="hangUp()" class="btn btn-danger icon">

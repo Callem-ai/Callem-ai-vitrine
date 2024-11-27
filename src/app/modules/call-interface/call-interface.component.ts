@@ -13,6 +13,9 @@ export class CallInterfaceComponent implements AfterViewInit {
   private callSession: any;
   micEnabled = false;
   isMicMuted = true; // Initially muted
+  name: string = '';
+  phone: string = '';
+  constructor(private route: ActivatedRoute) {}
 
 //isCalling = false;
   ngAfterViewInit(): void {
@@ -25,6 +28,10 @@ export class CallInterfaceComponent implements AfterViewInit {
       () => this.initializeSIP(),
       (e: any) => console.error('Failed to initialize SIPml:', e)
     );
+    this.route.params.subscribe(params => {
+      this.name = params['name'];
+      this.phone = params['phone'];
+    });
   }
 
   initializeSIP() {
@@ -65,7 +72,7 @@ export class CallInterfaceComponent implements AfterViewInit {
         audio_remote: document.getElementById('audio-remote')
       });
       this.callSession.addEventListener('connected', this.onCallConnected.bind(this));
-      this.callSession.call('sip:5100@webrtc-beta.callem.ai');
+      this.callSession.call(`sip:${this.phone}@webrtc-beta.callem.ai`);
 
 
   }
